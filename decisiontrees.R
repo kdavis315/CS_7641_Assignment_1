@@ -7,6 +7,7 @@ require(rpart)
 require(rpartScore)
 require(plyr)
 require(e1071)
+require(RSNNS) #for confusion matrix
 
 #citations
 #http://topepo.github.io/caret/index.html
@@ -77,7 +78,23 @@ wine_tree_pruned <- rpart::prune(wine_tree, cp=0.01306363)
 plot(wine_tree_pruned, main="After Pruning")
 text(wine_tree_pruned, cex=0.7)
 
-#Confusion matrix
+#Confusion matrix - Before Pruning
+#training set
+tree.fitted <- predict(wine_tree, wine_training_set)
+confusionMatrix(wine_training_set$HighQuality2, tree.fitted)
+
+#validation set
+tree.pred <- predict(wine_tree, wine_val_set)
+confusionMatrix(wine_val_set$HighQuality3, tree.pred)
+
+#test set
+HighQuality4 <- ifelse(wine_test_set$HighQuality == "No", 0, 1)
+wine_test_set <- data.frame(wine_test_set, HighQuality4)
+wine_test_set$HighQuality <- NULL
+tree.pred <- predict(wine_tree, wine_test_set)
+confusionMatrix(wine_test_set$HighQuality4, tree.pred)
+
+#After Pruning
 #training set
 tree.fitted <- predict(wine_tree_pruned, wine_training_set)
 confusionMatrix(wine_training_set$HighQuality2, tree.fitted)
@@ -87,13 +104,8 @@ tree.pred <- predict(wine_tree_pruned, wine_val_set)
 confusionMatrix(wine_val_set$HighQuality3, tree.pred)
 
 #test set
-HighQuality4 <- ifelse(wine_test_set$HighQuality == "No", 0, 1)
-wine_test_set <- data.frame(wine_test_set, HighQuality4)
-wine_test_set$HighQuality <- NULL
 tree.pred <- predict(wine_tree_pruned, wine_test_set)
 confusionMatrix(wine_test_set$HighQuality4, tree.pred)
-
-
 
 ###
 #Bank Decision Tree
@@ -138,7 +150,23 @@ bank_tree_pruned <- rpart::prune(bank_tree, cp=0.01790281)
 plot(bank_tree_pruned, main="After Pruning")
 text(bank_tree_pruned, cex=0.7)
 
-#Confusion matrix
+#Confusion matrix - Before Pruning
+#training set
+tree.fitted <- predict(bank_tree, bank_training_set)
+confusionMatrix(bank_training_set$y2, tree.fitted)
+
+#validation set
+tree.pred <- predict(bank_tree, bank_val_set)
+confusionMatrix(bank_val_set$y3, tree.pred)
+
+#test set
+y4 <- ifelse(bank_test_set$y == "no", 0, 1)
+bank_test_set <- data.frame(bank_test_set, y4)
+bank_test_set$y <- NULL
+tree.pred <- predict(bank_tree, bank_test_set)
+confusionMatrix(bank_test_set$y4, tree.pred)
+
+#After Pruning
 #training set
 tree.fitted <- predict(bank_tree_pruned, bank_training_set)
 confusionMatrix(bank_training_set$y2, tree.fitted)
@@ -148,8 +176,5 @@ tree.pred <- predict(bank_tree_pruned, bank_val_set)
 confusionMatrix(bank_val_set$y3, tree.pred)
 
 #test set
-y4 <- ifelse(bank_test_set$y == "no", 0, 1)
-bank_test_set <- data.frame(bank_test_set, y4)
-bank_test_set$y <- NULL
 tree.pred <- predict(bank_tree_pruned, bank_test_set)
 confusionMatrix(bank_test_set$y4, tree.pred)

@@ -4,6 +4,7 @@
 #Required packages
 require(caret)
 require(kernlab)
+require(RSNNS) #for confusion matrix
 
 #citations
 #http://topepo.github.io/caret/index.html

@@ -5,6 +5,7 @@
 require(caret)
 require(class)
 require(DMwR)
+require(RSNNS) #for confusion matrix
 
 #citations
 #http://topepo.github.io/caret/index.html
